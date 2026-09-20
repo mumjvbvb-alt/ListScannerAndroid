@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
         binding.captureButton.setOnClickListener {
             if (nom.isNotBlank() && prenom.isNotBlank() && pere.isNotBlank()) {
                 people.add(Person(nom, prenom, pere))
-                binding.countText.text = "عدد المسجلين: \${people.size}"
+                binding.countText.text = "عدد المسجلين: ${people.size}"
                 binding.statusText.text = "تمت الإضافة. وجّه الورقة التالية."
                 resetRecognition()
             }
@@ -149,7 +149,7 @@ class MainActivity : ComponentActivity() {
 
         runOnUiThread {
             binding.fieldsText.text =
-                "NOM: \${nom.ifBlank { "—" }}    PRÉNOM: \${prenom.ifBlank { "—" }}    PÈRE: \${pere.ifBlank { "—" }}"
+                "NOM: ${nom.ifBlank { "—" }}    PRÉNOM: ${prenom.ifBlank { "—" }}    PÈRE: ${pere.ifBlank { "—" }}"
 
             val ready = nom.isNotBlank() && prenom.isNotBlank() && pere.isNotBlank()
             binding.captureButton.isEnabled = ready
@@ -218,8 +218,9 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun levenshtein(a: String, b: String): Int {
-        val prev = IntArray(b.length + 1) { it }
+        var prev = IntArray(b.length + 1) { it }
         var current = IntArray(b.length + 1)
+
         for (i in 1..a.length) {
             current[0] = i
             for (j in 1..b.length) {
@@ -230,7 +231,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
             val tmp = prev
-            for (j in current.indices) tmp[j] = current[j]
+            prev = current
             current = tmp
         }
         return prev[b.length]
